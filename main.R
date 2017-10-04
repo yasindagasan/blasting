@@ -14,7 +14,8 @@ str(vibrationRecords)
 vibrationRecords$PPV # view PPV data
 vibrationRecords$SD  # view SD data
 
-attenuation <- attenuationCalculate(vibrationRecords) # calculate the attenuation for the records named "vibrationRecords"
+# calculate the attenuation for the records named "vibrationRecords"
+attenuation <- attenuationCalculate(vibrationRecords) 
 
 # plot the attenuation calculated
 plotAttenuation(attenuation, # file with the attenuation calculations
