@@ -1,5 +1,5 @@
 #####################################################################
-# Project to use the boostrap confidence line in vibration prediction
+# Scripts to predict the blast induced ground vibrations
 #####################################################################
 source("Functions/attenuationCalculate.R")
 source("Functions/plotAttenuation.R")
