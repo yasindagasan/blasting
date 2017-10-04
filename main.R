@@ -25,3 +25,4 @@ plotAttenuation(attenuation, # file with the attenuation calculations
                 )
 # get the statistics about the attenuation of the vibrations
 attenuation 
+
