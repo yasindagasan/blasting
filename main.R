@@ -23,4 +23,5 @@ plotAttenuation(attenuation, # file with the attenuation calculations
                 rangeY = c(0.4,20) # limits of the plot in Y
 
                 )
-attenuation # get the statistics about the attenuation of the vibrations
+# get the statistics about the attenuation of the vibrations
+attenuation 
