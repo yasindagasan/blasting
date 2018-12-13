@@ -1,6 +1,6 @@
 attenuationCalculate <- function(records){
   
-  logPPVCalc <- log10(records$PPV) # an example to an arithmetic operation in R
+  logPPVCalc <- log10(records$PPV) 
   logSDCalc  <- log10(records$SD)
   
   minPPVlog <- min(logPPVCalc)
