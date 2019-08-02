@@ -1,0 +1,76 @@
+---
+title: "Results"
+author: "Yasin Dagasan"
+date: "8/2/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+source("../utils/attenuationCalculate.R")
+source("../utils/plotAttenuation.R")
+source("../utils/monte_carlo_sim.R")
+library(ggpmisc)
+library(ggplot2)
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+# Exploratory Data Analyses
+
+
+
+```{r load_data}
+vibrationRecords <- read.csv("../dat/data.csv", header = T)
+vibrationRecords_log = vibrationRecords
+vibrationRecords_log$SD <- log10(vibrationRecords$SD)
+vibrationRecords_log$PPV <- log10(vibrationRecords$PPV)
+
+```
+
+## Summary Statistics
+
+```{r summary, echo=FALSE}
+summary(vibrationRecords)
+```
+
+## Histograms of the SD and PPV values
+
+Range of the PPV values of the production blasts are higher than the test blasts. The test blasts were designed not to have a high PPV value to minimise the risk of damage during the test blasts.
+
+```{r hist_PPV, echo=FALSE}
+ggplot(vibrationRecords,aes(x=PPV)) + geom_histogram(aes(fill=Type),color="grey80",bins = 10)+
+  facet_grid(Type~.)
+```
+
+Test blasts were designed to cover the possible scaled distance that would be used during the production blasts. Therefore, range of the scaled distance values are rather similar to those of the production blasts.
+
+```{r hist_SD, echo=FALSE}
+ggplot(vibrationRecords,aes(x=SD)) + geom_histogram(aes(fill=Type),color="grey80",bins = 10)+
+  facet_grid(Type~.)
+```
+
+
+Compute the attenuation
+```{r atten_calculate, echo=FALSE}
+attenuation <- attenuationCalculate(vibrationRecords) 
+```
+
+```{r scatter, echo=FALSE}
+
+ggplot(subset(vibrationRecords, Type %in% c("Test")), aes(x=SD, y=PPV,type="production")) +
+  geom_point() + 
+  geom_smooth(method=lm, se=F, fullrange=TRUE)+scale_y_continuous(trans = "log10")+scale_x_continuous(trans = "log10")+
+  geom_abline(intercept = log10(attenuation$Intercept95), slope = attenuation$slope,color="red",linetype="dashed")+
+  stat_poly_eq(formula = attenuation$bestFitLine, 
+                aes(label = paste(..eq.label.., ..rr.label.., sep = "~~~")), 
+                parse = TRUE,hjust=0,vjust=19)
+```
+
+```{r scatter, echo=FALSE}
+temp_var  = predict(attenuation$bestFitLine, interval="prediction")
+new_df <- cbind(vibrationRecords, temp_var)
+ggplot(subset(new_df, Type %in% c("Test")), aes(x=SD, y=PPV,type="production")) +
+  geom_point() + 
+  geom_smooth(method=lm, se=FALSE, fullrange=TRUE)+scale_y_continuous(trans = "log10")+
+  geom_line(aes(y=10), color = "red", linetype = "dashed")
+```
