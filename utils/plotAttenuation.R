@@ -26,7 +26,7 @@ plotAttenuation <- function(atten, rangeX=NULL, rangeY=NULL, bootstrapK=NULL,reg
         xlim = rangeX, 
        ylim = rangeY
   )
-  
+  # TODO the calculation of the 95% needs to be fixed
   if (!is.null(mc_samples)){
     mean_mcmc = mean(mc_samples[,1])
     # se_mcmc = sd(mc_samples[,1])/sqrt(length(mc_samples[,1]))
